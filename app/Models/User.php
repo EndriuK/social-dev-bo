@@ -36,4 +36,9 @@ class User extends Authenticatable
         'is_private' => 'boolean',
         'friend_request_enabled' => 'boolean',
     ];
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
 }

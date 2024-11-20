@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\PostController;
 use Illuminate\Support\Facades\Route;
 
 // Test route - nota che non serve più il prefisso 'api/'
@@ -17,4 +18,8 @@ Route::prefix('auth')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/user', [AuthController::class, 'user']);
     });
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('posts', PostController::class);
 });
