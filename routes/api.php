@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\LikeController;
 use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\FollowController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\ConversationController;
+use App\Http\Controllers\Api\MessageController;
 use Illuminate\Support\Facades\Route;
 
 // Test route - nota che non serve più il prefisso 'api/'
@@ -16,7 +18,7 @@ Route::get('/test', function () {
 // Auth routes
 Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/login', [AuthController::class, 'login']);                    
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
@@ -46,4 +48,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead']);
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead']);
     Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy']);
+
+    Route::get('/conversations', [ConversationController::class, 'index']);
+    Route::post('/conversations', [ConversationController::class, 'store']);
+    Route::get('/conversations/{conversation}', [ConversationController::class, 'show']);
+    
+    Route::post('/conversations/{conversation}/messages', [MessageController::class, 'store']);
+    Route::post('/conversations/{conversation}/read', [MessageController::class, 'markAsRead']);
+
+    Route::get('/conversations/search', [ConversationController::class, 'search']);
+    Route::get('/conversations/{conversation}/messages/search', [MessageController::class, 'search']);
 });

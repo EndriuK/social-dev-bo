@@ -46,4 +46,25 @@ class User extends Authenticatable
     {
         return $this->hasMany(Notification::class);
     }
+
+    public function conversations1()
+    {
+        return $this->hasMany(Conversation::class, 'user1_id');
+    }
+
+    public function conversations2()
+    {
+        return $this->hasMany(Conversation::class, 'user2_id');
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    public function allConversations()
+    {
+        return Conversation::where('user1_id', $this->id)
+            ->orWhere('user2_id', $this->id);
+    }
 }
