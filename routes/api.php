@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PostController;
+use App\Http\Controllers\Api\LikeController;
 use Illuminate\Support\Facades\Route;
 
 // Test route - nota che non serve più il prefisso 'api/'
@@ -22,4 +23,6 @@ Route::prefix('auth')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('posts', PostController::class);
+    Route::post('/posts/{post}/like', [LikeController::class, 'toggle']);
+    Route::get('/posts/{post}/is-liked', [LikeController::class, 'isLiked']);
 });

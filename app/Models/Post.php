@@ -43,6 +43,11 @@ class Post extends Model
         return $this->hasMany(Comment::class);
     }
 
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
     // Scopes
     public function scopePublished($query)
     {
@@ -59,5 +64,10 @@ class Post extends Model
     public function setSlugAttribute($value)
     {
         $this->attributes['slug'] = \Str::slug($value ?? $this->title);
+    }
+
+    public function isLikedByUser($userId)
+    {
+        return $this->likes()->where('user_id', $userId)->exists();
     }
 }
