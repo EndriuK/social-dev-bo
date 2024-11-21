@@ -7,9 +7,12 @@ use App\Models\Post;
 use App\Models\Like;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\CreatesNotifications;
 
 class LikeController extends Controller
 {
+    use CreatesNotifications;
+
     public function toggle(Post $post)
     {
         $like = $post->likes()->where('user_id', Auth::id())->first();
@@ -25,6 +28,18 @@ class LikeController extends Controller
 
         $post->likes()->create(['user_id' => Auth::id()]);
         $post->increment('likes_count');
+        
+        // Crea notifica per il proprietario del post
+        $this->createNotification(
+            $post->user_id,
+            'like',
+            [
+                'post_id' => $post->id,
+                'user_id' => Auth::id(),
+                'user_name' => Auth::user()->name
+            ]
+        );
+
         return response()->json([
             'liked' => true, 
             'likes_count' => $post->likes_count
